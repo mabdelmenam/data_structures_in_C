@@ -19,11 +19,6 @@ typedef struct HashTable {
     HashNode* buckets[TABLE_SIZE]; //each item in the buckets array is not a HashNode but a pointer to a HashNode
 } HashTable;
 
-int main(){
-
-
-    return 0;
-}
 //Hash function
 unsigned int hash (const char* key){
     unsigned long hash = 5381;
@@ -53,6 +48,7 @@ void insert(HashTable* table, const char* key, const char* value){
             //need to update the value for that key
             free(current->value); //free the current value in the node
             current->value = strdup(value); //update it with the new value
+            return;
         }
         current = current->next;
     }
@@ -65,4 +61,40 @@ void insert(HashTable* table, const char* key, const char* value){
         newNode->next = table->buckets[index];
 
         table->buckets[index] = newNode;
+}
+
+//Print function
+void print_table(HashTable* table){
+    for(int i = 0; i< TABLE_SIZE; i++){
+        HashNode* node = table->buckets[i]; //This declares a pointer to HashNode, node is a variable that stores the address of HashNode in memory
+        if(node != NULL){
+            printf("Bucket number %d: \n", i);
+            while( node != NULL )//looping through the linked list or chain
+            {
+                printf("%s => %s \n", node->key, node->value);
+                node = node->next;
+            }
+
+        }
+    }
+}
+
+int main(){
+
+    HashTable* table = malloc(sizeof(HashTable));
+
+    for(int i = 0;i < TABLE_SIZE;i++){
+        table->buckets[i] = NULL;
+    }
+
+     // Insert test entries
+    insert(table, "cat", "meow");
+    insert(table, "dog", "bark");
+    insert(table, "cow", "moo");
+    insert(table, "cat", "purr"); // Should update "cat" value
+
+    // Print results
+    printf("=== Hash Table Contents ===\n");
+    print_table(table);
+    return 0;
 }
