@@ -1,1 +1,1 @@
-LinkedList Implementation in C
+Singly LinkedList Implementation in C
